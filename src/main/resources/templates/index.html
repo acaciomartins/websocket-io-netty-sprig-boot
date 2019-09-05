@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<script src="./js/jquery.min.js"></script>
+<script src="./js/socket.io.js"></script>
+<title>Home</title>
+</head>
+<body>
+	<h2>Teste de Mensagens com WebSocketIO.</h2>
+	<p>
+		Connection Status: <span style="color: red" id="status">Not
+			Connected</span>
+	</p>
+	<div>
+		<label for="idPush">ID Push: </label> <input type="text" id="idPush"
+			placeholder="ID Push" /> <br /> <label for="idPushDestino">ID
+			Push Destino: </label> <input type="text" name="idPushDestino"
+			id="idPushDestino" placeholder="ID Push Destino" /> <br />
+		<button id="connect" onclick="connect();">Conectar</button>
+		<button id="disconnect" onclick="disconnect();" disabled="disabled">Disconectar</button>
+	</div>
+	<div id="conversationDiv">
+		<label for="message">Mensagem: </label> <input type="text"
+			id="message" placeholder="Mensagem a ser enviada" />
+		<button id="sendName" onclick="sendMessage();">Enviar</button>
+		<p id="response"></p>
+	</div>
+
+	<script>
+	var socket = null;
+	var conn = null;
+
+	function disconnect() {
+		socket.close();
+	}
+	
+	function connect() {
+		socket  = io.connect("http://localhost:3000");
+		conn = $('#connect');
+        disconn = $('#disconnect');
+        connected = false;
+        
+		socket.on('connect', function() {
+			$("#status").text("Connected")
+			connected = true;
+			socket.emit("online", {
+				"idSocket": socket.id,
+				"idPush": $("#idPush").val()	            
+			});
+
+			socket.on($("#idPush").val() + '/msg', function(response) {
+				$("#status").text("Connected")
+				var msg = $('#response');
+		        msg.html(response.texto);
+			});
+
+			socket.on("disconnect", function() {
+				$("#status").text("Not Connected")
+			});
+
+			if (connected) {
+	            conn.attr('disabled', 'true');
+	            disconn.removeAttr('disabled');
+	        } else {
+	            conn.removeAttr('disabled');
+	            disconn.attr('disabled', 'true');
+	        }
+		});
+	}
+		
+	function sendMessage() {
+	   socket.emit("mensagem", {
+		   'idPushDestinatario': $("#idPushDestino").val(),	         
+            'idSession':  socket.id,
+            'texto': $("#message").val()
+		});
+    }
+
+	function updateResult(price) {
+		$("#price").text(price.toFixed(1));
+		$("#priceTextField").val(price + 1)
+	}
+		
+	</script>
+</body>
+</html>
