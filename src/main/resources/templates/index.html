@@ -36,7 +36,7 @@
 	}
 	
 	function connect() {
-		socket  = io.connect("http://localhost:3000");
+		socket  = io.connect("http://192.168.0.45:3000");
 		conn = $('#connect');
         disconn = $('#disconnect');
         connected = false;
@@ -71,7 +71,9 @@
 		
 	function sendMessage() {
 	   socket.emit("mensagem", {
-		   'idPushDestinatario': $("#idPushDestino").val(),	         
+		   'idPushDestinatario': $("#idPushDestino").val(),
+		   'idPushRemetente': $("#idPushDestino").val(),
+		   'nomeRemetente': 'Acacio',	         
             'idSession':  socket.id,
             'texto': $("#message").val()
 		});

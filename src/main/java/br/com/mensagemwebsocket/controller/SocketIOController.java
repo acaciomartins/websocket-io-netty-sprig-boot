@@ -17,6 +17,7 @@ import br.com.mensagemwebsocket.model.MensagemChat;
 import br.com.mensagemwebsocket.model.MensagemOnline;
 import br.com.mensagemwebsocket.model.UsuarioOnline;
 import br.com.mensagemwebsocket.repository.UsuarioOnlineRepository;
+import br.com.mensagemwebsocket.service.PushService;
 
 @Component
 public class SocketIOController {
@@ -26,6 +27,9 @@ public class SocketIOController {
 	@Autowired
 	private UsuarioOnlineRepository usuarioOnlineRepository;
 
+	@Autowired
+	private PushService pushService;
+	
 	private SocketIONamespace namespace;
 
 	public SocketIONamespace getNamespace() {
@@ -79,6 +83,7 @@ public class SocketIOController {
 			LOGGER.debug("Mensagem enviada [ " + mensagemChat.getTexto() + " ]");
 			LOGGER.debug("id push eviado do destinatario: " + mensagemChat.getIdPushDestinatario());
 			LOGGER.debug("response: " + mensagemChat);
+			
 			// Consulta Usuario Online
 			final UsuarioOnline usuarioOnline = usuarioOnlineRepository
 					.findByIdPush(mensagemChat.getIdPushDestinatario());
@@ -87,6 +92,7 @@ public class SocketIOController {
 				namespace.getBroadcastOperations().sendEvent(mensagemChat.getIdPushDestinatario() + "/msg",
 						mensagemChat);
 			} else {
+				pushService.push(mensagemChat);
 				System.out.println("Mensagem enviada ao PUSH");
 			}
 		}
