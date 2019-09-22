@@ -81,15 +81,15 @@ public class SocketIOController {
 		@Override
 		public void onData(SocketIOClient client, MensagemChat mensagemChat, AckRequest ack) throws Exception {
 			LOGGER.debug("Mensagem enviada [ " + mensagemChat.getTexto() + " ]");
-			LOGGER.debug("id push eviado do destinatario: " + mensagemChat.getIdPushDestinatario());
+			LOGGER.debug("id push contato: " + mensagemChat.getIdPushContato());
 			LOGGER.debug("response: " + mensagemChat);
 			
-			// Consulta Usuario Online
+			// Consulta Usuario (contato) Online
 			final UsuarioOnline usuarioOnline = usuarioOnlineRepository
-					.findByIdPush(mensagemChat.getIdPushDestinatario());
+					.findByIdPush(mensagemChat.getIdPushContato());
 			
 			if (null != usuarioOnline) {
-				namespace.getBroadcastOperations().sendEvent(mensagemChat.getIdPushDestinatario() + "/msg",
+				namespace.getBroadcastOperations().sendEvent(mensagemChat.getIdPushContato() + "/msg",
 						mensagemChat);
 			} else {
 				pushService.push(mensagemChat);

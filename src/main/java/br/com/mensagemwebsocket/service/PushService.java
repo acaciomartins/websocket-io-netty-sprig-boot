@@ -43,7 +43,7 @@ public class PushService {
 //					+ "\"contents\": {\"en\": \"Mensagem\"}" + "}";
 
 			String strJsonBody = "{" + "\"app_id\": \"" + appId + "\"," + "\"include_player_ids\": [\""
-					+ mensagemChat.getIdPushDestinatario() + "\"]," + "\"data\": {\"idPushRemetente\": \""
+					+ mensagemChat.getIdPushContato() + "\"]," + "\"data\": {\"idPushRemetente\": \""
 					+ mensagemChat.getIdPushRemetente() + "\"}," + "\"headings\": {\"en\": \""
 					+ mensagemChat.getNomeRemetente() + "\"}," + "\"contents\": {\"en\": \"" + mensagemChat.getTexto()
 					+ "\"}" + "}";
@@ -79,7 +79,7 @@ public class PushService {
 		final PushService push = new PushService();
 		final MensagemChat mensagemChat = new MensagemChat();
 		mensagemChat.setNomeRemetente("Acácio");
-		mensagemChat.setIdPushDestinatario("4d77d6a0-b6a4-4e6d-a4ee-7b25400d055b");
+		mensagemChat.setIdPushContato("4d77d6a0-b6a4-4e6d-a4ee-7b25400d055b");
 		mensagemChat.setTexto("Texto mensagem teste");
 
 		push.push(mensagemChat);

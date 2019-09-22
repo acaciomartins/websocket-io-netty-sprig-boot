@@ -71,8 +71,8 @@
 		
 	function sendMessage() {
 	   socket.emit("mensagem", {
-		   'idPushDestinatario': $("#idPushDestino").val(),
-		   'idPushRemetente': $("#idPushDestino").val(),
+		   'idPushContato': $("#idPushDestino").val(),
+		   'idPushRemetente': $("#idPush").val(),
 		   'nomeRemetente': 'Acacio',	         
             'idSession':  socket.id,
             'texto': $("#message").val()
